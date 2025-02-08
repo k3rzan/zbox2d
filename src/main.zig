@@ -351,7 +351,7 @@ const Polygon = extern struct {
 extern "c" fn b2Body_IsValid(id: BodyId) bool;
 extern "c" fn b2Body_GetPosition(bodyId: BodyId) Vec2;
 extern "c" fn b2DefaultBodyDef() BodyDef;
-extern "c" fn b2CreateBody(worldId: WorldId, def: [*c]const BodyDef) BodyId;
+extern "c" fn b2CreateBody(worldId: box2d.b2WorldId, def: [*c]const BodyDef) BodyId;
 extern "c" fn b2DefaultShapeDef() ShapeDef;
 extern "c" fn b2CreatePolygonShape(bodyId: BodyId, def: [*c]const ShapeDef, polygon: [*c]const Polygon) ShapeId;
 extern "c" fn b2MakeBox(hx: f32, hy: f32) Polygon;
@@ -367,7 +367,7 @@ pub fn getDefaultBodyDef() BodyDef {
     return b2DefaultBodyDef();
 }
 
-pub fn createBody(worldId: WorldId, def: *const BodyDef) BodyId {
+pub fn createBody(worldId: box2d.b2WorldId, def: *const BodyDef) BodyId {
     return b2CreateBody(worldId, @as([*c]const BodyDef, @ptrCast(def)));
 }
 pub fn getDefaultShapeDef() ShapeDef {
