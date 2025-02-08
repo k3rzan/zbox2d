@@ -3,15 +3,15 @@ const box2d = @cImport({
     @cInclude("box2d/box2d.h");
 });
 
-pub const b2FinishTaskCallback = fn (userTask: ?*anyopaque, userContext: ?*anyopaque) callconv(.C) void;
-pub const b2TaskCallback = fn (i32, i32, u32, ?*anyopaque) callconv(.C) void;
-pub const b2EnqueueTaskCallback = fn (?*const b2TaskCallback, i32, i32, ?*anyopaque, ?*anyopaque) callconv(.C) ?*anyopaque;
+const b2FinishTaskCallback = fn (userTask: ?*anyopaque, userContext: ?*anyopaque) callconv(.C) void;
+const b2TaskCallback = fn (i32, i32, u32, ?*anyopaque) callconv(.C) void;
+const b2EnqueueTaskCallback = fn (?*const b2TaskCallback, i32, i32, ?*anyopaque, ?*anyopaque) callconv(.C) ?*anyopaque;
 
 const b2RestitutionCallback = fn (restitutionA: f32, materialA: i32, restitutionB: f32, materialB: i32) callconv(.C) f32;
 
 const b2FrictionCallback = fn (frictionA: f32, materialA: i32, frictionB: i32, materialB: i32) callconv(.C) f32;
 
-const WorldDef = extern struct {
+pub const WorldDef = extern struct {
     index1: u16,
     revision: u16,
 
@@ -86,7 +86,7 @@ const WorldDef = extern struct {
 
 extern "c" fn b2DefaultWorldDef() WorldDef;
 
-const WorldId = extern struct {
+pub const WorldId = extern struct {
     index1: u16,
     revision: u16,
 };

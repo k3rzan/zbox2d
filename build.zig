@@ -60,7 +60,7 @@ pub fn build(b: *std.Build) void {
     // set a preferred release mode, allowing the user to decide how to optimize.
     const optimize = b.standardOptimizeOption(.{});
 
-    _ = b.addModule("root", .{
+    const zbox2d_mod = b.addModule("root", .{
         .optimize = optimize,
         .root_source_file = b.path("src/main.zig"),
     });
@@ -97,8 +97,19 @@ pub fn build(b: *std.Build) void {
     lib.linkLibC();
     b.installArtifact(lib);
 
-    // This declares intent for the executable to be installed into the
-    // standard location when the user invokes the "install" step (the default
-    // step when running `zig build`).
+    zbox2d_mod.linkLibrary(lib);
 
+    const demo = b.addExecutable(.{
+        .name = "demo",
+        .root_source_file = b.path("src/test.zig"),
+        .target = target,
+        .optimize = optimize,
+    });
+
+    demo.root_module.addImport("zbox2d", zbox2d_mod);
+    demo.linkLibrary(lib);
+
+    if (b.option(bool, "enable-demo", "install demo exe") orelse false) {
+        b.installArtifact(demo);
+    }
 }
