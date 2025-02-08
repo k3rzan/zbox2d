@@ -59,7 +59,7 @@ pub inline fn WorldStep(world_id: WorldId, time_step: f32, sub_step_count: i32) 
 const BodyId = extern struct {
     index1: i32,
     world0: u16,
-    generation: u16,
+    revision: u16,
 };
 
 const Rot = extern struct {
@@ -98,7 +98,7 @@ const BodyDef = extern struct {
 const ShapeId = extern struct {
     index1: i32,
     world0: u16,
-    generation: u16,
+    revision: u16,
 };
 
 const ShapeType = enum {
@@ -106,13 +106,13 @@ const ShapeType = enum {
     b2_capsuleShape,
     b2_segmentShape,
     b2_polygonShape,
-    b2_chainSegmentShape,
+    b2_smoothSegmentShape,
     b2_shapeTypeCount,
 };
 
 const Filter = extern struct {
-    categoryBits: u64,
-    maskBits: u64,
+    categoryBits: u32,
+    maskBits: u32,
     groupIndex: i32,
 };
 
