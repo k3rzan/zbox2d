@@ -176,6 +176,10 @@ pub inline fn makeBox(hx: f32, hy: f32) Polygon {
     return @bitCast(box2d.b2MakeBox(hx, hy));
 }
 
+pub inline fn getBodyLinearVelocity(bodyId: BodyId) Vec2 {
+    return @bitCast(box2d.b2Body_GetLinearVelocity(@bitCast(bodyId)));
+}
+
 pub inline fn setBodyLinearVelocity(bodyId: BodyId, linear_velocity: Vec2) void {
     box2d.b2Body_SetLinearVelocity(@bitCast(bodyId), @bitCast(linear_velocity));
 }
