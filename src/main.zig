@@ -161,7 +161,7 @@ pub inline fn getDefaultShapeDef() ShapeDef {
 }
 
 pub inline fn createPolygonShape(bodyId: BodyId, def: *ShapeDef, polygon: *Polygon) ShapeId {
-    return @bitCast(box2d.b2CreatePolygonShape(bodyId, @ptrCast(def), @ptrCast(polygon)));
+    return @bitCast(box2d.b2CreatePolygonShape(@bitCast(bodyId), @ptrCast(def), @ptrCast(polygon)));
 }
 
 pub inline fn makeBox(hx: f32, hy: f32) Polygon {
