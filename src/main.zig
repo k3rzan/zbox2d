@@ -56,25 +56,25 @@ pub inline fn WorldStep(world_id: WorldId, time_step: f32, sub_step_count: i32) 
     box2d.b2World_Step(@bitCast(world_id), time_step, sub_step_count);
 }
 
-const BodyId = extern struct {
+pub const BodyId = extern struct {
     index1: i32,
     world0: u16,
     revision: u16,
 };
 
-const Rot = extern struct {
+pub const Rot = extern struct {
     c: f32,
     s: f32,
 };
 
-const BodyType = enum(c_int) {
+pub const BodyType = enum(c_int) {
     b2_staticBody = 0,
     b2_kinematicBody = 1,
     b2_dynamicBody = 2,
     b2_bodyTypeCount,
 };
 
-const BodyDef = extern struct {
+pub const BodyDef = extern struct {
     type: BodyType,
     position: Vec2,
     rotation: Rot,
@@ -95,13 +95,13 @@ const BodyDef = extern struct {
     internalValue: i32,
 };
 
-const ShapeId = extern struct {
+pub const ShapeId = extern struct {
     index1: i32,
     world0: u16,
     revision: u16,
 };
 
-const ShapeType = enum {
+pub const ShapeType = enum {
     b2_circleShape,
     b2_capsuleShape,
     b2_segmentShape,
@@ -110,13 +110,13 @@ const ShapeType = enum {
     b2_shapeTypeCount,
 };
 
-const Filter = extern struct {
+pub const Filter = extern struct {
     categoryBits: u32,
     maskBits: u32,
     groupIndex: i32,
 };
 
-const ShapeDef = extern struct {
+pub const ShapeDef = extern struct {
     userData: ?*anyopaque,
     friction: f32,
     restitution: f32,
@@ -132,9 +132,9 @@ const ShapeDef = extern struct {
     internalValue: i32,
 };
 
-const B2_MAX_POLYGON_VERTICES: comptime_int = 8;
+pub const B2_MAX_POLYGON_VERTICES: comptime_int = 8;
 
-const Polygon = extern struct {
+pub const Polygon = extern struct {
     vertices: [B2_MAX_POLYGON_VERTICES]Vec2,
     normals: [B2_MAX_POLYGON_VERTICES]Vec2,
     centroid: Vec2,
