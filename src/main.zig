@@ -3,8 +3,6 @@ const box2d = @cImport({
     @cInclude("box2d/box2d.h");
 });
 
-extern "c" fn b2World_Step(world_id: WorldId, time_step: f32, sub_step_count: i32) void;
-
 const b2FinishTaskCallback = fn (userTask: ?*anyopaque, userContext: ?*anyopaque) callconv(.C) void;
 const b2TaskCallback = fn (i32, i32, u32, ?*anyopaque) callconv(.C) void;
 const b2EnqueueTaskCallback = fn (?*const b2TaskCallback, i32, i32, ?*anyopaque, ?*anyopaque) callconv(.C) ?*anyopaque;
@@ -91,30 +89,24 @@ pub const WorldDef = extern struct {
     i32ernalValue: i32,
 };
 
-extern "c" fn b2DefaultWorldDef() WorldDef;
-
 pub const WorldId = extern struct {
     index1: u16,
     revision: u16,
 };
 
-pub fn getDefaultWorldDef() box2d.b2WorldDef {
-    return box2d.b2DefaultWorldDef();
+pub inline fn getDefaultWorldDef() box2d.b2WorldDef {
+    return @bitCast(box2d.b2DefaultWorldDef());
 }
 
-extern "c" fn b2CreateWorld(world_def: [*c]WorldDef) WorldId;
-
-pub fn createWorld(world_def: [*c]box2d.b2WorldDef) box2d.b2WorldId {
-    return box2d.b2CreateWorld(world_def);
+pub inline fn createWorld(world_def: [*c]box2d.b2WorldDef) box2d.b2WorldId {
+    return @bitCast(box2d.b2CreateWorld(world_def));
 }
 
-extern "c" fn b2World_IsValid(world_id: WorldId) bool;
-
-pub fn isWorldValid(world_id: WorldId) bool {
-    return b2World_IsValid(world_id);
+pub inline fn isWorldValid(world_id: WorldId) bool {
+    return @bitCast(box2d.b2World_IsValid(world_id));
 }
 
-pub fn WorldStep(world_id: box2d.b2WorldId, time_step: f32, sub_step_count: i32) void {
+pub inline fn WorldStep(world_id: box2d.b2WorldId, time_step: f32, sub_step_count: i32) void {
     box2d.b2World_Step(world_id, time_step, sub_step_count);
 }
 
@@ -348,36 +340,28 @@ const Polygon = extern struct {
     count: i32,
 };
 
-extern "c" fn b2Body_IsValid(id: BodyId) bool;
-extern "c" fn b2Body_GetPosition(bodyId: BodyId) Vec2;
-extern "c" fn b2DefaultBodyDef() BodyDef;
-extern "c" fn b2CreateBody(worldId: box2d.b2WorldId, def: [*c]const BodyDef) BodyId;
-extern "c" fn b2DefaultShapeDef() ShapeDef;
-extern "c" fn b2CreatePolygonShape(bodyId: BodyId, def: [*c]const ShapeDef, polygon: [*c]const Polygon) ShapeId;
-extern "c" fn b2MakeBox(hx: f32, hy: f32) Polygon;
-
-pub fn isBodyValid(id: BodyId) bool {
-    return b2Body_IsValid(id);
+pub inline fn isBodyValid(id: BodyId) bool {
+    return @bitCast(box2d.b2Body_IsValid(@bitCast(id)));
 }
-pub fn getBodyPosition(bodyId: BodyId) Vec2 {
-    return b2Body_GetPosition(bodyId);
+pub inline fn getBodyPosition(bodyId: BodyId) Vec2 {
+    return @bitCast(box2d.b2Body_GetPosition(bodyId));
 }
 
-pub fn getDefaultBodyDef() BodyDef {
-    return b2DefaultBodyDef();
+pub inline fn getDefaultBodyDef() BodyDef {
+    return @bitCast(box2d.b2DefaultBodyDef());
 }
 
-pub fn createBody(worldId: box2d.b2WorldId, def: *const BodyDef) BodyId {
-    return b2CreateBody(worldId, @as([*c]const BodyDef, @ptrCast(def)));
+pub inline fn createBody(worldId: WorldId, def: *BodyDef) BodyId {
+    return @bitCast(box2d.b2CreateBody(worldId, @as([*c]const BodyDef, @ptrCast(def))));
 }
-pub fn getDefaultShapeDef() ShapeDef {
-    return b2DefaultShapeDef();
-}
-
-pub fn createPolygonShape(bodyId: BodyId, def: *const ShapeDef, polygon: *const Polygon) ShapeId {
-    return b2CreatePolygonShape(bodyId, @as([*c]const ShapeDef, @ptrCast(def)), @as([*c]const Polygon, @ptrCast(polygon)));
+pub inline fn getDefaultShapeDef() ShapeDef {
+    return @bitCast(box2d.b2DefaultShapeDef());
 }
 
-pub fn makeBox(hx: f32, hy: f32) Polygon {
-    return b2MakeBox(hx, hy);
+pub inline fn createPolygonShape(bodyId: BodyId, def: *ShapeDef, polygon: *Polygon) ShapeId {
+    return @bitCast(box2d.b2CreatePolygonShape(bodyId, @as([*c]const ShapeDef, @ptrCast(def)), @as([*c]const Polygon, @ptrCast(polygon))));
+}
+
+pub inline fn makeBox(hx: f32, hy: f32) Polygon {
+    return @bitCast(box2d.b2MakeBox(hx, hy));
 }
