@@ -149,6 +149,10 @@ pub inline fn getBodyPosition(bodyId: BodyId) Vec2 {
     return @bitCast(box2d.b2Body_GetPosition(@bitCast(bodyId)));
 }
 
+pub inline fn getBodyRotation(bodyId: BodyId) Rot {
+    return @bitCast(box2d.b2Body_GetRotation(@bitCast(bodyId)));
+}
+
 pub inline fn getDefaultBodyDef() BodyDef {
     return @bitCast(box2d.b2DefaultBodyDef());
 }
@@ -166,4 +170,16 @@ pub inline fn createPolygonShape(bodyId: BodyId, def: *ShapeDef, polygon: *Polyg
 
 pub inline fn makeBox(hx: f32, hy: f32) Polygon {
     return @bitCast(box2d.b2MakeBox(hx, hy));
+}
+
+pub inline fn setBodyLinearVelocity(bodyId: BodyId, linear_velocity: Vec2) void {
+    box2d.b2Body_SetLinearVelocity(@bitCast(bodyId), @bitCast(linear_velocity));
+}
+
+pub inline fn setTransform(bodyId: BodyId, position: Vec2, rotation: Vec2) void {
+    box2d.b2Body_SetTransform(@bitCast(bodyId), @bitCast(position), @bitCast(rotation));
+}
+
+pub inline fn getWorldSensorEvents(world_id: WorldId) void {
+    return @bitCast(box2d.b2World_GetSensorEvents(@bitCast(world_id)));
 }
