@@ -153,7 +153,7 @@ pub inline fn getBodyRotation(bodyId: BodyId) Rot {
     return @bitCast(box2d.b2Body_GetRotation(@bitCast(bodyId)));
 }
 
-pub inline fn getRotAngle(rot: Rot) Rot {
+pub inline fn getRotAngle(rot: Rot) f32 {
     return @bitCast(box2d.b2Rot_GetAngle(@bitCast(rot)));
 }
 
