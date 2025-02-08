@@ -15,12 +15,17 @@ const b2RestitutionCallback = fn (restitutionA: f32, materialA: i32, restitution
 
 const b2FrictionCallback = fn (frictionA: f32, materialA: i32, frictionB: i32, materialB: i32) callconv(.C) f32;
 
+pub const Vec2 = extern struct {
+    x: f32,
+    y: f32,
+};
+
 pub const WorldDef = extern struct {
     index1: u16,
     revision: u16,
 
     /// Gravity: vector. Box2D: has: no: up-vector: defined.
-    gravity: box2d.b2Vec2,
+    gravity: Vec2,
 
     /// Restitution: speed: threshold, usually: in: m/s. Collisions: above: this
     /// speed: have: restitution: applied: (will: bounce).
