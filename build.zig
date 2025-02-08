@@ -45,19 +45,9 @@ const box2d_source_files = &[_][]const u8{
     "world.c",
 };
 
-// Although this function looks imperative, note that its job is to
-// declaratively construct a build graph that will be executed by an external
-// runner.
 pub fn build(b: *std.Build) void {
-    // Standard target options allows the person running `zig build` to choose
-    // what target to build for. Here we do not override the defaults, which
-    // means any target is allowed, and the default is native. Other options
-    // for restricting supported target set are available.
     const target = b.standardTargetOptions(.{});
 
-    // Standard optimization options allow the person running `zig build` to select
-    // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall. Here we do not
-    // set a preferred release mode, allowing the user to decide how to optimize.
     const optimize = b.standardOptimizeOption(.{});
 
     const zbox2d_mod = b.addModule("zbox2d", .{
@@ -65,51 +55,15 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("src/main.zig"),
     });
 
-    // const lib = b.addStaticLibrary(.{
-    //     .name = "zbox2d",
-    //     .target = target,
-    //     .optimize = optimize,
-    //     .root_source_file = b.path("src/main.zig"),
-    // });
-
     const box2d_dep = b.dependency("box2d", .{ .target = target, .optimize = optimize });
-
-    // const box2d_mod = b.addModule("box2d", .{
-    //     .target = target,
-    //     .optimize = optimize,
-    //     .link_libc = true,
-    // });
 
     for (box2d_include_paths) |include_path| {
         zbox2d_mod.addIncludePath(box2d_dep.path(include_path));
-        // lib.addIncludePath(box2d_dep.path(include_path));
     }
-    for (box2d_source_files) |file| {
-        zbox2d_mod.addCSourceFile(.{
-            .file = box2d_dep.path(b.pathJoin(&.{ "src", file })),
-        });
-        // lib.addCSourceFile(.{
-        //     .file = box2d_dep.path(b.pathJoin(&.{ "src", file })),
-        // });
-    }
-
-    // lib.linkLibC();
-    // b.installArtifact(lib);
-
-    // zbox2d_mod.linkLibrary(lib);
-    zbox2d_mod.link_libc = true;
-
-    const demo = b.addExecutable(.{
-        .name = "demo",
-        .root_source_file = b.path("src/test.zig"),
-        .target = target,
-        .optimize = optimize,
+    zbox2d_mod.addCSourceFiles(.{
+        .root = box2d_dep.path("src"),
+        .files = box2d_source_files,
     });
 
-    demo.root_module.addImport("zbox2d", zbox2d_mod);
-    // demo.linkLibrary(lib);
-
-    if (b.option(bool, "enable-demo", "install demo exe") orelse false) {
-        b.installArtifact(demo);
-    }
+    zbox2d_mod.link_libc = true;
 }
