@@ -55,15 +55,27 @@ pub fn build(b: *std.Build) void {
         .root_source_file = b.path("src/main.zig"),
     });
 
+    const lib = b.addStaticLibrary(.{
+        .name = "zbox2d",
+        .link_libc = true,
+        .root_source_file = b.path("src/main.zig"),
+        .optimize = optimize,
+        .target = target,
+    });
+
     const box2d_dep = b.dependency("box2d", .{ .target = target, .optimize = optimize });
 
     for (box2d_include_paths) |include_path| {
         zbox2d_mod.addIncludePath(box2d_dep.path(include_path));
+        lib.addIncludePath(box2d_dep.path(include_path));
     }
-    zbox2d_mod.addCSourceFiles(.{
+    lib.addCSourceFiles(.{
         .root = box2d_dep.path("src"),
         .files = box2d_source_files,
     });
 
     zbox2d_mod.link_libc = true;
+    zbox2d_mod.linkLibrary(lib);
+
+    b.installArtifact(lib);
 }
