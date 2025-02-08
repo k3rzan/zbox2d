@@ -94,20 +94,20 @@ pub const WorldId = extern struct {
     revision: u16,
 };
 
-pub inline fn getDefaultWorldDef() box2d.b2WorldDef {
+pub inline fn getDefaultWorldDef() WorldDef {
     return @bitCast(box2d.b2DefaultWorldDef());
 }
 
-pub inline fn createWorld(world_def: [*c]box2d.b2WorldDef) box2d.b2WorldId {
-    return @bitCast(box2d.b2CreateWorld(world_def));
+pub inline fn createWorld(world_def: WorldDef) WorldId {
+    return @bitCast(box2d.b2CreateWorld(@ptrCast(&world_def)));
 }
 
 pub inline fn isWorldValid(world_id: WorldId) bool {
-    return @bitCast(box2d.b2World_IsValid(world_id));
+    return @bitCast(box2d.b2World_IsValid(@bitCast(world_id)));
 }
 
-pub inline fn WorldStep(world_id: box2d.b2WorldId, time_step: f32, sub_step_count: i32) void {
-    box2d.b2World_Step(world_id, time_step, sub_step_count);
+pub inline fn WorldStep(world_id: WorldId, time_step: f32, sub_step_count: i32) void {
+    box2d.b2World_Step(@bitCast(world_id), time_step, sub_step_count);
 }
 
 const BodyId = extern struct {
@@ -344,7 +344,7 @@ pub inline fn isBodyValid(id: BodyId) bool {
     return @bitCast(box2d.b2Body_IsValid(@bitCast(id)));
 }
 pub inline fn getBodyPosition(bodyId: BodyId) Vec2 {
-    return @bitCast(box2d.b2Body_GetPosition(bodyId));
+    return @bitCast(box2d.b2Body_GetPosition(@bitCast(bodyId)));
 }
 
 pub inline fn getDefaultBodyDef() BodyDef {
@@ -352,14 +352,14 @@ pub inline fn getDefaultBodyDef() BodyDef {
 }
 
 pub inline fn createBody(worldId: WorldId, def: *BodyDef) BodyId {
-    return @bitCast(box2d.b2CreateBody(worldId, @as([*c]const BodyDef, @ptrCast(def))));
+    return @bitCast(box2d.b2CreateBody(@bitCast(worldId), @ptrCast(def)));
 }
 pub inline fn getDefaultShapeDef() ShapeDef {
     return @bitCast(box2d.b2DefaultShapeDef());
 }
 
 pub inline fn createPolygonShape(bodyId: BodyId, def: *ShapeDef, polygon: *Polygon) ShapeId {
-    return @bitCast(box2d.b2CreatePolygonShape(bodyId, @as([*c]const ShapeDef, @ptrCast(def)), @as([*c]const Polygon, @ptrCast(polygon))));
+    return @bitCast(box2d.b2CreatePolygonShape(bodyId, @ptrCast(def), @ptrCast(polygon)));
 }
 
 pub inline fn makeBox(hx: f32, hy: f32) Polygon {
