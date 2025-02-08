@@ -115,7 +115,7 @@ pub fn isWorldValid(world_id: WorldId) bool {
 }
 
 pub fn WorldStep(world_id: WorldId, time_step: f32, sub_step_count: i32) void {
-    box2d.b2World_Step(world_id, time_step, sub_step_count);
+    box2d.b2World_Step(@as(box2d.b2WorldId, world_id), time_step, sub_step_count);
 }
 
 const BodyId = extern struct {
