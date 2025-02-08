@@ -81,16 +81,16 @@ pub fn build(b: *std.Build) void {
     // });
 
     for (box2d_include_paths) |include_path| {
+        zbox2d_mod.addIncludePath(box2d_dep.path(include_path));
         lib.addIncludePath(box2d_dep.path(include_path));
     }
     for (box2d_source_files) |file| {
+        zbox2d_mod.addCSourceFile(.{
+            .file = box2d_dep.path(b.pathJoin(&.{ "src", file })),
+        });
         lib.addCSourceFile(.{
             .file = box2d_dep.path(b.pathJoin(&.{ "src", file })),
         });
-    }
-
-    for (box2d_include_paths) |include_dir| {
-        zbox2d_mod.addIncludePath(b.path(include_dir));
     }
 
     lib.linkLibC();
