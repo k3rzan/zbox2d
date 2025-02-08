@@ -98,8 +98,8 @@ pub const WorldId = extern struct {
     revision: u16,
 };
 
-pub fn getDefaultWorldDef() WorldDef {
-    return b2DefaultWorldDef();
+pub fn getDefaultWorldDef() box2d.b2WorldDef {
+    return box2d.b2DefaultWorldDef();
 }
 
 extern "c" fn b2CreateWorld(world_def: [*c]WorldDef) WorldId;
