@@ -3,6 +3,8 @@ const box2d = @cImport({
     @cInclude("box2d/box2d.h");
 });
 
+pub extern "c" fn b2World_Step(world_id: WorldId, time_step: f32, sub_step_count: i32) void;
+
 const b2FinishTaskCallback = fn (userTask: ?*anyopaque, userContext: ?*anyopaque) callconv(.C) void;
 const b2TaskCallback = fn (i32, i32, u32, ?*anyopaque) callconv(.C) void;
 const b2EnqueueTaskCallback = fn (?*const b2TaskCallback, i32, i32, ?*anyopaque, ?*anyopaque) callconv(.C) ?*anyopaque;
@@ -110,4 +112,8 @@ extern "c" fn b2World_IsValid(world_id: WorldId) bool;
 
 pub fn isWorldValid(world_id: WorldId) bool {
     return b2World_IsValid(world_id);
+}
+
+pub fn WorldStep(world_id: WorldId, time_step: f32, sub_step_count: i32) void {
+    b2World_Step(world_id, time_step, sub_step_count);
 }
