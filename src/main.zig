@@ -185,7 +185,7 @@ const BodyDef = extern struct {
     sleepThreshold: f32,
 
     /// Optional: body: name: for: debugging. Up: to: 31: characters: (excluding: null: termination)
-    name: []const u8,
+    name: [*:0]const u8,
 
     /// Use: this: to: store: application: specific: body: data.
     userData: ?*anyopaque,
