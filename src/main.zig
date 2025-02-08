@@ -104,8 +104,8 @@ pub fn getDefaultWorldDef() WorldDef {
 
 extern "c" fn b2CreateWorld(world_def: [*c]WorldDef) WorldId;
 
-pub fn createWorld(world_def: *WorldDef) WorldId {
-    return b2CreateWorld(@as([*c]WorldDef, @ptrCast(world_def)));
+pub fn createWorld(world_def: [*c]box2d.b2WorldDef) box2d.b2WorldId {
+    return box2d.b2CreateWorld(world_def);
 }
 
 extern "c" fn b2World_IsValid(world_id: WorldId) bool;
@@ -114,8 +114,8 @@ pub fn isWorldValid(world_id: WorldId) bool {
     return b2World_IsValid(world_id);
 }
 
-pub fn WorldStep(world_id: WorldId, time_step: f32, sub_step_count: i32) void {
-    box2d.b2World_Step(@as(box2d.b2WorldId, world_id), time_step, sub_step_count);
+pub fn WorldStep(world_id: box2d.b2WorldId, time_step: f32, sub_step_count: i32) void {
+    box2d.b2World_Step(world_id, time_step, sub_step_count);
 }
 
 const BodyId = extern struct {
