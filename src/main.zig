@@ -1,10 +1,6 @@
 const std = @import("std");
 const box2d = @cImport({
     @cInclude("box2d/box2d.h");
-    @cInclude("box2d/collision.h");
-    @cInclude("box2d/id.h");
-    @cInclude("box2d/math_functions.h");
-    @cInclude("box2d/types.h");
 });
 
 const b2FinishTaskCallback = fn (userTask: ?*anyopaque, userContext: ?*anyopaque) callconv(.C) void;
