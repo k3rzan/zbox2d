@@ -60,7 +60,7 @@ pub fn build(b: *std.Build) void {
     // set a preferred release mode, allowing the user to decide how to optimize.
     const optimize = b.standardOptimizeOption(.{});
 
-    const zbox2d_mod = b.addModule("root", .{
+    const zbox2d_mod = b.addModule("zbox2d", .{
         .optimize = optimize,
         .root_source_file = b.path("src/main.zig"),
     });
@@ -89,10 +89,9 @@ pub fn build(b: *std.Build) void {
         });
     }
 
-    // for (box2d_mod.include_dirs.items) |include_dir| {
-    //     b.addIncludePath(include_dir.path.dupe(b));
-    // }
-    //
+    for (box2d_include_paths) |include_dir| {
+        zbox2d_mod.addIncludePath(b.path(include_dir));
+    }
 
     lib.linkLibC();
     b.installArtifact(lib);
