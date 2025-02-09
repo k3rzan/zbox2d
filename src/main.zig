@@ -153,8 +153,8 @@ pub const SensorEndTouchEvent = extern struct {
 };
 
 pub const SensorEvents = extern struct {
-    beginEvents: *SensorBeginTouchEvent,
-    endEvents: *SensorEndTouchEvent,
+    beginEvents: [*]SensorBeginTouchEvent,
+    endEvents: [*]SensorEndTouchEvent,
     beginCount: i32,
     endCount: i32,
 };
