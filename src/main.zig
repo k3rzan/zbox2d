@@ -142,6 +142,23 @@ pub const Polygon = extern struct {
     count: i32,
 };
 
+pub const SensorBeginTouchEvent = extern struct {
+    sensorShapeId: ShapeId,
+    visitorShapeId: ShapeId,
+};
+
+pub const SensorEndTouchEvent = extern struct {
+    sensorShapeId: ShapeId,
+    visitorShapeId: ShapeId,
+};
+
+pub const SensorEvents = extern struct {
+    beginEvents: *SensorBeginTouchEvent,
+    endEvents: *SensorEndTouchEvent,
+    beginCount: i32,
+    endCount: i32,
+};
+
 pub inline fn isBodyValid(id: BodyId) bool {
     return @bitCast(box2d.b2Body_IsValid(@bitCast(id)));
 }
@@ -188,6 +205,6 @@ pub inline fn setTransform(bodyId: BodyId, position: Vec2, rotation: Vec2) void 
     box2d.b2Body_SetTransform(@bitCast(bodyId), @bitCast(position), @bitCast(rotation));
 }
 
-pub inline fn getWorldSensorEvents(world_id: WorldId) void {
+pub inline fn getWorldSensorEvents(world_id: WorldId) SensorEvents {
     return @bitCast(box2d.b2World_GetSensorEvents(@bitCast(world_id)));
 }
