@@ -875,6 +875,27 @@ pub const ContactEvents = extern struct {
     hitCount: i32,
 };
 
+pub const Hull = extern struct {
+    points: [8]Vec2,
+    count: i32,
+
+    pub inline fn makePolygon(hull: Hull, radius: f32) Polygon {
+        return @bitCast(box2d.b2MakePolygon(@ptrCast(&hull), radius));
+    }
+
+    pub inline fn makeOffsetPolygon(hull: Hull, position: Vec2, rotation: Rot) Polygon {
+        return @bitCast(box2d.b2MakeOffsetPolygon(@ptrCast(&hull), @bitCast(position), @bitCast(rotation)));
+    }
+
+    pub inline fn compute(points: []const Vec2) Hull {
+        return @bitCast(box2d.b2ComputeHull(@ptrCast(points.ptr), @intCast(points.len)));
+    }
+
+    pub inline fn validate(hull: Hull) bool {
+        return box2d.b2ValidateHull(@ptrCast(&hull));
+    }
+};
+
 pub inline fn isBodyValid(id: BodyId) bool {
     return @bitCast(box2d.b2Body_IsValid(@bitCast(id)));
 }
