@@ -665,6 +665,183 @@ pub const WorldDef = extern struct {
 };
 
 pub const WorldId = extern struct {
+    pub const nullId = WorldId{
+        .index1 = 0,
+        .revision = 0,
+    };
+
+    pub inline fn create(def: WorldDef) WorldId {
+        return @bitCast(box2d.b2CreateWorld(@ptrCast(&def)));
+    }
+
+    pub inline fn destroy(worldId: WorldId) void {
+        box2d.b2DestroyWorld(@bitCast(worldId));
+    }
+
+    pub inline fn isValid(id: WorldId) bool {
+        return @bitCast(box2d.b2World_IsValid(@bitCast(id)));
+    }
+
+    pub inline fn step(worldId: WorldId, timeStep: f32, subStepCount: u32) void {
+        box2d.b2World_Step(@bitCast(worldId), timeStep, @intCast(subStepCount));
+    }
+
+    pub inline fn draw(worldId: WorldId, dbgDraw: *DebugDraw) void {
+        box2d.b2World_Draw(@bitCast(worldId), @ptrCast(dbgDraw));
+    }
+
+    pub inline fn getSensorEvents(worldId: WorldId) SensorEvents {
+        return @bitCast(box2d.b2World_GetSensorEvents(@bitCast(worldId)));
+    }
+
+    pub inline fn getContactEvents(worldId: WorldId) ContactEvents {
+        return @bitCast(box2d.b2World_GetContactEvents(@bitCast(worldId)));
+    }
+
+    pub inline fn overlapAABB(worldId: WorldId, aabb: AABB, filter: QueryFilter, overlapFn: *OverlapResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_OverlapAABB(@bitCast(worldId), @bitCast(aabb), @bitCast(filter), @ptrCast(overlapFn), @ptrCast(context)));
+    }
+
+    pub inline fn overlapCircle(worldId: WorldId, circle: Circle, transform: Transform, filter: QueryFilter, overlapFn: *OverlapResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_OverlapCircle(@bitCast(worldId), @ptrCast(&circle), @bitCast(transform), @bitCast(filter), @ptrCast(overlapFn), @ptrCast(context)));
+    }
+
+    pub inline fn overlapPoint(worldId: WorldId, point: Vec2, transform: Transform, filter: QueryFilter, overlapFn: OverlapResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_OverlapPoint(@bitCast(worldId), @bitCast(point), @bitCast(transform), @bitCast(filter), @ptrCast(overlapFn), context));
+    }
+
+    pub inline fn overlapCapsule(worldId: WorldId, capsule: Capsule, transform: Transform, filter: QueryFilter, overlapFn: *OverlapResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_OverlapCapsule(@bitCast(worldId), @ptrCast(&capsule), @bitCast(transform), @bitCast(filter), @ptrCast(overlapFn), @ptrCast(context)));
+    }
+
+    pub inline fn overlapPolygon(worldId: WorldId, polygon: Polygon, transform: Transform, filter: QueryFilter, overlapFn: *OverlapResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_OverlapPolygon(@bitCast(worldId), @ptrCast(&polygon), @bitCast(transform), @bitCast(filter), @ptrCast(overlapFn), @ptrCast(context)));
+    }
+
+    pub inline fn castRay(worldId: WorldId, origin: Vec2, translation: Vec2, filter: QueryFilter, castFn: *CastResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_CastRay(@bitCast(worldId), @bitCast(origin), @bitCast(translation), @bitCast(filter), @ptrCast(castFn), @ptrCast(context)));
+    }
+
+    pub inline fn castRayClosest(worldId: WorldId, origin: Vec2, translation: Vec2, filter: QueryFilter) RayResult {
+        return @bitCast(box2d.b2World_CastRayClosest(@bitCast(worldId), @bitCast(origin), @bitCast(translation), @bitCast(filter)));
+    }
+
+    pub inline fn castCircle(worldId: WorldId, circle: Circle, originTransform: Transform, translation: Vec2, filter: QueryFilter, castFn: *CastResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_CastCircle(@bitCast(worldId), @ptrCast(&circle), @bitCast(originTransform), @bitCast(translation), @bitCast(filter), @ptrCast(castFn), @ptrCast(context)));
+    }
+
+    pub inline fn castCapsule(worldId: WorldId, capsule: Capsule, originTransform: Transform, translation: Vec2, filter: QueryFilter, castFn: *CastResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_CastCapsule(@bitCast(worldId), @ptrCast(&capsule), @bitCast(originTransform), @bitCast(translation), @bitCast(filter), @ptrCast(castFn), @ptrCast(context)));
+    }
+
+    pub inline fn castPolygon(worldId: WorldId, polygon: Polygon, originTransform: Transform, translation: Vec2, filter: QueryFilter, castFn: *CastResultFn, context: ?*anyopaque) TreeStats {
+        return @bitCast(box2d.b2World_CastPolygon(@bitCast(worldId), @ptrCast(&polygon), @bitCast(originTransform), @bitCast(translation), @bitCast(filter), @ptrCast(castFn), @ptrCast(context)));
+    }
+
+    pub inline fn enableSleeping(worldId: WorldId, flag: bool) void {
+        box2d.b2World_EnableSleeping(@bitCast(worldId), flag);
+    }
+
+    pub inline fn isSleepingEnabled(worldId: WorldId) bool {
+        return box2d.b2World_IsSleepingEnabled(@bitCast(worldId));
+    }
+
+    pub inline fn enableWarmStarting(worldId: WorldId, flag: bool) void {
+        box2d.b2World_EnableWarmStarting(@bitCast(worldId), flag);
+    }
+
+    pub inline fn isWarmStartingEnabled(worldId: WorldId) bool {
+        return box2d.b2World_IsWarmStartingEnabled(@bitCast(worldId));
+    }
+
+    pub inline fn enableContinuous(worldId: WorldId, flag: bool) void {
+        box2d.b2World_EnableContinuous(@bitCast(worldId), flag);
+    }
+
+    pub inline fn isContinuousEnabled(worldId: WorldId) bool {
+        box2d.b2World_IsContinuousEnabled(@bitCast(worldId));
+    }
+
+    pub inline fn setRestitutionThreshold(worldId: WorldId, value: f32) void {
+        box2d.b2World_SetRestitutionThreshold(@bitCast(worldId), value);
+    }
+
+    pub inline fn getRestitutionThreshold(worldId: WorldId) f32 {
+        return box2d.b2World_GetRestitutionThreshold(worldId);
+    }
+
+    pub inline fn setHitEventThreshold(worldId: WorldId, value: f32) void {
+        box2d.b2World_SetHitEventThreshold(@bitCast(worldId), value);
+    }
+
+    pub inline fn getHitEventThreshold(worldId: WorldId) f32 {
+        return box2d.b2World_GetHitEventThreshold(worldId);
+    }
+
+    pub inline fn setPreSolveCallback(worldId: WorldId, preSolveFn: ?*PreSolveFn, context: ?*anyopaque) void {
+        box2d.b2World_SetPreSolveCallback(@bitCast(worldId), @ptrCast(preSolveFn), @ptrCast(context));
+    }
+
+    pub inline fn setGravity(worldId: WorldId, gravity: Vec2) void {
+        box2d.b2World_SetGravity(@bitCast(worldId), @bitCast(gravity));
+    }
+
+    pub inline fn getGravity(worldId: WorldId) Vec2 {
+        return @bitCast(box2d.b2World_GetGravity(@bitCast(worldId)));
+    }
+
+    pub inline fn setContactTuning(worldId: WorldId, hertz: f32, dampingRatio: f32, pushVelocity: f32) void {
+        box2d.b2World_SetContactTuning(@bitCast(worldId), hertz, dampingRatio, pushVelocity);
+    }
+
+    pub inline fn setJointTuning(worldId: WorldId, hertz: f32, dampingRatio: f32) void {
+        box2d.b2World_SetJointTuning(@bitCast(worldId), hertz, dampingRatio);
+    }
+
+    pub inline fn setMaximumLinearVelocity(worldId: WorldId, maximumLinearVelocity: f32) void {
+        box2d.b2World_SetMaximumLinearVelocity(@bitCast(worldId), maximumLinearVelocity);
+    }
+
+    pub inline fn getMaximumLinearVelocity(worldId: WorldId) f32 {
+        return box2d.b2World_GetMaximumLinearVelocity(@bitCast(worldId));
+    }
+
+    pub inline fn setUserData(worldId: WorldId, userData: ?*anyopaque) void {
+        box2d.b2World_SetUserData(@bitCast(worldId), userData);
+    }
+
+    pub inline fn getUserData(worldId: WorldId) ?*anyopaque {
+        return box2d.b2World_GetUserData(@bitCast(worldId));
+    }
+
+    pub inline fn getProfile(worldId: WorldId) Profile {
+        return @bitCast(box2d.b2World_GetProfile(@bitCast(worldId)));
+    }
+
+    pub inline fn getCounters(worldId: WorldId) Counters {
+        return @bitCast(box2d.b2World_GetCounters(@bitCast(worldId)));
+    }
+
+    pub inline fn dumpMemoryStats(worldId: WorldId) void {
+        box2d.b2World_DumpMemoryStats(@bitCast(worldId));
+    }
+
+    pub inline fn rebuildStaticTree(worldId: WorldId) void {
+        box2d.b2World_RebuildStaticTree(@bitCast(worldId));
+    }
+
+    pub inline fn setCustomFilterCallback(worldId: WorldId, fcn: ?*const CustomFilterFn, context: ?*anyopaque) void {
+        box2d.b2World_SetCustomFilterCallback(worldId, @ptrCast(fcn), context);
+    }
+
+    pub inline fn eql(worldId: WorldId, other: WorldId) bool {
+        return worldId.index1 == other.index1 and worldId.revision == other.revision;
+    }
+
+    pub inline fn isNull(this: WorldId) bool {
+        return this.index1 == 0;
+    }
+
     index1: u16,
     revision: u16,
 };
